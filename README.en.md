@@ -34,6 +34,12 @@ under a master key before hitting the database, and are served through a **REST 
 - **Cloud integration**: validate key validity against cloud APIs + probe reachable resources (Aliyun STS / Tencent STS / Cloudflare / Google service account)
 - **Import tool**: aggregate secrets from `docker-stacks/*/docker-compose.yaml`, `/root/.secrets/*.env`, and per-service `config.yaml`
 
+## Screenshot
+
+![Keyhelm dashboard](assets/keyhelm-dashboard.png)
+
+> The screenshot is from a local demo instance (only the `aliyun` / `tencent` / `cloudflare` example projects; all values are `demo-key-*` placeholders, not real credentials).
+
 ## Quick Start (local)
 
 ```bash

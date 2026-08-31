@@ -32,6 +32,12 @@
 - **云厂商集成**：直接调云 API 验证 key 有效性 + 探测可访问资源（阿里云 STS / 腾讯云 STS / Cloudflare / Google 服务账号）
 - **导入工具**：从 `docker-stacks/*/docker-compose.yaml`、`/root/.secrets/*.env`、各服务 `config.yaml` 聚合密钥入库
 
+## 界面截图
+
+![Keyhelm 仪表盘](assets/keyhelm-dashboard.png)
+
+> 截图为本地 demo 实例（仅含 aliyun / tencent / cloudflare 三个示例项目，值均为 `demo-key-*` 演示占位，非真实密钥）。
+
 ## 快速开始（本地）
 
 ```bash
