@@ -1,0 +1,12 @@
+# 构建上下文排除项（Docker）
+target/
+data/
+node_modules/
+web/keyhelm-web/node_modules/
+.git/
+.github/
+*.log
+.gitignore
+README.md
+Dockerfile
+docker-compose.yaml

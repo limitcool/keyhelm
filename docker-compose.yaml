@@ -1,0 +1,44 @@
+# Keyhelm 密钥配置中心 — Docker Compose 示例
+#
+# 快速开始：
+#   docker compose up -d --build
+#   docker compose logs keyhelm      # 首次启动会打印 admin 密码 + admin token，请保存
+#
+# 卷：keyhelm-data 持久化 data/（DB + master.key + jwt.secret）
+# 反代：将 keyhelm 端口映射到 caddy 等反代走 HTTPS，前端一键复制需 HTTPS 或本地回环
+
+services:
+  keyhelm:
+    build: .
+    image: keyhelm:latest
+    container_name: keyhelm
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - keyhelm-data:/data
+      # 如需用 import 聚合服务器散落密钥，挂载只读目录（可选）
+      # - /opt/docker-stacks:/opt/docker-stacks:ro
+      # - /root/.secrets:/root/.secrets:ro
+    environment:
+      # 主密钥：优先用 env 注入（示例），或用 /data/master.key 文件
+      KEYHELM_MASTER_KEY: "${KEYHELM_MASTER_KEY:-}"
+      # JWT 签名密钥：不设则首次启动生成并持久化到 /data/jwt.secret
+      KEYHELM_JWT_SECRET: "${KEYHELM_JWT_SECRET:-}"
+      # 数据库：默认 sqlite（/data/keyhelm.db）
+      KEYHELM_DB_KIND: "sqlite"
+      # 如需 PostgreSQL，取消注释并填写：
+      # KEYHELM_DB_KIND: "postgres"
+      # KEYHELM_DB_URL: "postgres://keyhelm:CHANGE_ME@postgres:5432/keyhelm"
+      # 监听地址（默认 0.0.0.0:8080）
+      KEYHELM_BIND_ADDR: "0.0.0.0:8080"
+    healthcheck:
+      # slim 镜像自带 wget，探测 /healthz（免鉴权）
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  keyhelm-data:

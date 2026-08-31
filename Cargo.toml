@@ -1,0 +1,62 @@
+[package]
+name = "keyhelm"
+version = "0.1.0"
+edition = "2021"
+description = "密钥配置中心 — AI 可读写的统一密钥管理 (Rust)"
+license = "MIT"
+
+[lib]
+name = "keyhelm"
+path = "src/lib.rs"
+
+[[bin]]
+name = "keyhelm"
+path = "src/main.rs"
+
+[dependencies]
+# web
+axum = "0.8"
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.6", features = ["cors", "trace", "compression-gzip"] }
+rust-embed = { version = "8", features = ["include-exclude"] }
+
+# db
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "sqlite", "postgres", "tls-rustls"] }
+
+# crypto
+aes-gcm = "0.10"
+rand = { version = "0.9", features = ["os_rng"] }
+sha2 = "0.10"
+argon2 = "0.5"
+base64 = "0.22"
+hmac = "0.12"
+sha1 = "0.10"
+rsa = { version = "0.9", features = ["pem", "sha2"] }
+
+# auth (JWT)
+jsonwebtoken = "9"
+
+# config / serde
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+
+# cloud provider probe (HTTP)
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+
+# cli / misc
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+[dev-dependencies]
+tower = { version = "0.5", features = ["util"] }
+tempfile = "3"
+http-body-util = "0.1"
+
+[profile.release]
+lto = true
+strip = true
