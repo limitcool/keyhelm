@@ -2,10 +2,11 @@
 # vite 的 outDir 是相对前端目录的 ../../src/ui/static，
 # 所以前端源码必须放在 /workspace/web/keyhelm-web/ 下，
 # 构建产物才恰好落到 /workspace/src/ui/static/，与仓库结构一致。
-FROM node:20-alpine AS frontend
+# pnpm 11 需要 Node ≥22.13（用 node:sqlite），故用 node:22-alpine。
+FROM node:22-alpine AS frontend
 WORKDIR /workspace/web/keyhelm-web
 COPY web/keyhelm-web/package.json web/keyhelm-web/pnpm-lock.yaml web/keyhelm-web/pnpm-workspace.yaml ./
-RUN corepack enable && corepack prepare pnpm@latest --activate \
+RUN corepack enable && corepack prepare pnpm@11 --activate \
     && pnpm install --frozen-lockfile
 COPY web/keyhelm-web/ ./
 RUN pnpm build
